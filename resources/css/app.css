@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    /* Headings use Noto Serif Display */
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Noto Serif Display', serif;
+    }
+
+    /* Ensure minimum touch target size for interactive elements (WCAG 2.5.5) */
+    button,
+    [role="button"],
+    a {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Exception: inline text links don't need touch targets */
+    p a,
+    li a,
+    td a,
+    span a {
+        min-height: auto;
+        min-width: auto;
+    }
+
+    /* Exception: slider indicators */
+    .slider-dot {
+        min-height: 0;
+        min-width: 0;
+    }
+
+    /* Respect reduced motion preferences */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+}
+
+@layer components {
+    /* Reusable button base */
+    .btn {
+        @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+    }
+
+    .btn-primary {
+        @apply btn bg-black text-white hover:bg-gray-800 focus-visible:ring-gray-500;
+    }
+
+    .btn-secondary {
+        @apply btn bg-white text-black border border-black hover:bg-gray-50 focus-visible:ring-gray-500;
+    }
+}
+
+/* Alpine.js cloak — hide elements until Alpine initializes */
+[x-cloak] {
+    display: none !important;
+}
