@@ -18,4 +18,14 @@ enum PaymentStatus: string
             self::Refunded => 'Refunded',
         };
     }
+
+    public function color(): string
+    {
+        return match ($this) {
+            self::Pending => 'gray',
+            self::Paid => 'success',
+            self::Failed => 'danger',
+            self::Refunded => 'warning',
+        };
+    }
 }
