@@ -33,7 +33,7 @@
         <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
             <p class="text-sm text-gray-500" aria-live="polite">
                 <span wire:loading.remove wire:target="query,categories,brands,minPrice,maxPrice,sort">
-                    {{ $products->total() }} {{ Str::plural('result', $products->total()) }}
+                    {{ $totalProducts }} {{ Str::plural('result', $totalProducts) }}
                     @if($query)
                         for "<strong>{{ e($query) }}</strong>"
                     @endif
@@ -187,7 +187,7 @@
 
             {{-- Product grid --}}
             <div class="lg:col-span-3">
-                <div wire:loading.class="opacity-50 pointer-events-none" wire:target="query,categories,brands,minPrice,maxPrice,sort,gotoPage,previousPage,nextPage" class="transition-opacity">
+                <div wire:loading.class="opacity-50 pointer-events-none" wire:target="query,categories,brands,minPrice,maxPrice,sort" class="transition-opacity">
                     @if($products->isNotEmpty())
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
                             @foreach($products as $product)
@@ -195,9 +195,19 @@
                             @endforeach
                         </div>
 
-                        <div class="mt-8">
-                            {{ $products->links() }}
-                        </div>
+                        @if($hasMore)
+                            <div class="mt-8 text-center">
+                                <button
+                                    wire:click="loadMore"
+                                    wire:loading.attr="disabled"
+                                    class="inline-flex items-center gap-2 bg-gray-900 text-white px-8 py-3 text-sm font-semibold hover:bg-gray-800 transition-colors disabled:opacity-50"
+                                >
+                                    <svg wire:loading wire:target="loadMore" class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                                    <span wire:loading.remove wire:target="loadMore">Load More</span>
+                                    <span wire:loading wire:target="loadMore">Loading...</span>
+                                </button>
+                            </div>
+                        @endif
                     @else
                         <div class="text-center py-16">
                             <svg class="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" aria-hidden="true">

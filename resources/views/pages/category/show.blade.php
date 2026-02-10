@@ -1,7 +1,8 @@
 @php
     /** @var \App\Models\Category $category */
-    /** @var \Illuminate\Pagination\LengthAwarePaginator $products */
+    /** @var \Illuminate\Database\Eloquent\Collection $products */
     /** @var \Illuminate\Database\Eloquent\Collection $children */
+    /** @var int $total */
 
     $sortOptions = [
         'newest' => 'Newest',
@@ -46,7 +47,7 @@
 
         {{-- Sort + Count --}}
         <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
-            <p class="text-sm text-gray-500">{{ $products->total() }} {{ Str::plural('product', $products->total()) }}</p>
+            <p class="text-sm text-gray-500">{{ $total }} {{ Str::plural('product', $total) }}</p>
 
             <div class="flex items-center gap-2">
                 <label for="sort-select" class="text-sm text-gray-500 hidden sm:inline">Sort by:</label>
@@ -70,14 +71,34 @@
 
         {{-- Product grid --}}
         @if($products->isNotEmpty())
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                @foreach($products as $product)
-                    <x-product-card :product="$product" />
-                @endforeach
-            </div>
+            <div x-data="{ offset: 12, loading: false, hasMore: {{ $total > 12 ? 'true' : 'false' }} }">
+                <div id="category-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                    @foreach($products as $product)
+                        <x-product-card :product="$product" />
+                    @endforeach
+                </div>
 
-            <div class="mt-8">
-                {{ $products->links() }}
+                <div x-show="hasMore" class="mt-8 text-center">
+                    <button
+                        @click="
+                            loading = true;
+                            fetch('{{ route('category.loadMore', $category->slug) }}?offset=' + offset + '&sort={{ $sort }}')
+                                .then(r => { if (r.status === 204) { hasMore = false; loading = false; return ''; } return r.text(); })
+                                .then(html => {
+                                    if (html) {
+                                        document.getElementById('category-products-grid').insertAdjacentHTML('beforeend', html);
+                                        offset += 12;
+                                    }
+                                    loading = false;
+                                })
+                        "
+                        :disabled="loading"
+                        class="inline-flex items-center gap-2 bg-gray-900 text-white px-8 py-3 text-sm font-semibold hover:bg-gray-800 transition-colors disabled:opacity-50"
+                    >
+                        <svg x-show="loading" class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                        <span x-text="loading ? 'Loading...' : 'Load More'"></span>
+                    </button>
+                </div>
             </div>
         @else
             <div class="text-center py-16">

@@ -1,6 +1,7 @@
 @php
     /** @var \App\Models\BlogPost $post */
-    /** @var \Illuminate\Pagination\LengthAwarePaginator $comments */
+    /** @var \Illuminate\Database\Eloquent\Collection $comments */
+    /** @var int $commentTotal */
     /** @var \Illuminate\Database\Eloquent\Collection $relatedPosts */
 @endphp
 
@@ -83,13 +84,16 @@
     </article>
 
     {{-- Comments --}}
-    <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-gray-200">
+    <section
+        class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-gray-200"
+        x-data="{ offset: 10, loading: false, hasMore: {{ $commentTotal > 10 ? 'true' : 'false' }} }"
+    >
         <h2 class="text-xl font-bold text-gray-900">
-            Comments ({{ $comments->total() }})
+            Comments ({{ $commentTotal }})
         </h2>
 
         @if($comments->isNotEmpty())
-            <div class="mt-6 space-y-6">
+            <div id="comments-list" class="mt-6 space-y-6">
                 @foreach($comments as $comment)
                     <div class="flex gap-4">
                         <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-sm font-medium">
@@ -108,8 +112,26 @@
                 @endforeach
             </div>
 
-            <div class="mt-6">
-                {{ $comments->links() }}
+            <div x-show="hasMore" class="mt-6 text-center">
+                <button
+                    @click="
+                        loading = true;
+                        fetch('{{ route('blog.comments.loadMore', $post->slug) }}?offset=' + offset)
+                            .then(r => { if (r.status === 204) { hasMore = false; loading = false; return ''; } return r.text(); })
+                            .then(html => {
+                                if (html) {
+                                    document.getElementById('comments-list').insertAdjacentHTML('beforeend', html);
+                                    offset += 10;
+                                }
+                                loading = false;
+                            })
+                    "
+                    :disabled="loading"
+                    class="inline-flex items-center gap-2 text-sm font-medium text-primary-600 hover:text-primary-800 disabled:opacity-50"
+                >
+                    <svg x-show="loading" class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                    <span x-text="loading ? 'Loading...' : 'Load More Comments'"></span>
+                </button>
             </div>
         @endif
 

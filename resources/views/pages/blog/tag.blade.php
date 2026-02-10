@@ -1,6 +1,7 @@
 @php
     /** @var \App\Models\BlogTag $tag */
-    /** @var \Illuminate\Pagination\LengthAwarePaginator $posts */
+    /** @var \Illuminate\Database\Eloquent\Collection $posts */
+    /** @var int $total */
 @endphp
 
 <x-layouts.app>
@@ -20,17 +21,37 @@
             <h1 class="text-3xl font-bold text-gray-900">#{{ $tag->name }}</h1>
         </div>
 
-        <p class="text-sm text-gray-500 mb-6">{{ $posts->total() }} {{ Str::plural('post', $posts->total()) }}</p>
+        <p class="text-sm text-gray-500 mb-6">{{ $total }} {{ Str::plural('post', $total) }}</p>
 
         @if($posts->isNotEmpty())
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                @foreach($posts as $post)
-                    <x-blog-card :post="$post" />
-                @endforeach
-            </div>
+            <div x-data="{ offset: 12, loading: false, hasMore: {{ $total > 12 ? 'true' : 'false' }} }">
+                <div id="blog-tag-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                    @foreach($posts as $post)
+                        <x-blog-card :post="$post" />
+                    @endforeach
+                </div>
 
-            <div class="mt-8">
-                {{ $posts->links() }}
+                <div x-show="hasMore" class="mt-8 text-center">
+                    <button
+                        @click="
+                            loading = true;
+                            fetch('{{ route('blog.tag.loadMore', $tag->slug) }}?offset=' + offset)
+                                .then(r => { if (r.status === 204) { hasMore = false; loading = false; return ''; } return r.text(); })
+                                .then(html => {
+                                    if (html) {
+                                        document.getElementById('blog-tag-grid').insertAdjacentHTML('beforeend', html);
+                                        offset += 12;
+                                    }
+                                    loading = false;
+                                })
+                        "
+                        :disabled="loading"
+                        class="inline-flex items-center gap-2 bg-gray-900 text-white px-8 py-3 text-sm font-semibold hover:bg-gray-800 transition-colors disabled:opacity-50"
+                    >
+                        <svg x-show="loading" class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                        <span x-text="loading ? 'Loading...' : 'Load More'"></span>
+                    </button>
+                </div>
             </div>
         @else
             <div class="text-center py-16">

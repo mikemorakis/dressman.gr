@@ -5,18 +5,15 @@ namespace App\Livewire;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Url;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class ProductSearch extends Component
 {
-    use WithPagination;
-
     #[Url(as: 'q', except: '')]
     public string $query = '';
 
@@ -37,34 +34,41 @@ class ProductSearch extends Component
     #[Url(as: 'sort', except: 'relevance')]
     public string $sort = 'relevance';
 
+    public int $perPage = 12;
+
+    public function loadMore(): void
+    {
+        $this->perPage += 12;
+    }
+
     public function updatedQuery(): void
     {
-        $this->resetPage();
+        $this->perPage = 12;
     }
 
     public function updatedCategories(): void
     {
-        $this->resetPage();
+        $this->perPage = 12;
     }
 
     public function updatedBrands(): void
     {
-        $this->resetPage();
+        $this->perPage = 12;
     }
 
     public function updatedMinPrice(): void
     {
-        $this->resetPage();
+        $this->perPage = 12;
     }
 
     public function updatedMaxPrice(): void
     {
-        $this->resetPage();
+        $this->perPage = 12;
     }
 
     public function updatedSort(): void
     {
-        $this->resetPage();
+        $this->perPage = 12;
     }
 
     public function clearFilters(): void
@@ -74,13 +78,19 @@ class ProductSearch extends Component
         $this->minPrice = '';
         $this->maxPrice = '';
         $this->sort = 'relevance';
-        $this->resetPage();
+        $this->perPage = 12;
     }
 
     public function render(): View
     {
+        $query = $this->buildQuery();
+        $totalProducts = (clone $query)->count();
+        $products = $query->take($this->perPage)->get();
+
         return view('livewire.product-search', [
-            'products' => $this->getProducts(),
+            'products' => $products,
+            'totalProducts' => $totalProducts,
+            'hasMore' => $totalProducts > $this->perPage,
             'allCategories' => Category::visible()->orderBy('name')->get(),
             'allBrands' => Brand::visible()->orderBy('name')->get(),
             'hasActiveFilters' => ! empty($this->categories) || ! empty($this->brands)
@@ -96,9 +106,9 @@ class ProductSearch extends Component
     }
 
     /**
-     * @return \Illuminate\Pagination\LengthAwarePaginator<int, Product>
+     * @return Builder<Product>
      */
-    private function getProducts(): LengthAwarePaginator
+    private function buildQuery(): Builder
     {
         /** @var Builder<Product> $query */
         $query = Product::active()
@@ -143,7 +153,7 @@ class ProductSearch extends Component
             default => $this->query === '' ? $query->latest('published_at') : $query,
         };
 
-        return $query->paginate(12);
+        return $query;
     }
 
     private const MAX_SEARCH_TOKENS = 10;

@@ -32,6 +32,7 @@ Route::get('/faq', fn () => view('pages.faq'))->name('faq');
 Route::get('/simata-gia-plysimo-roychon', fn () => view('pages.simata-gia-plysimo-roychon'))->name('simata-gia-plysimo-roychon');
 
 Route::get('/api/products/load-more', [HomeController::class, 'loadMore'])->name('products.loadMore');
+Route::get('/api/category/{slug}/load-more', [CategoryController::class, 'loadMore'])->name('category.loadMore');
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::get('/cart/drawer', [CartController::class, 'drawer'])->name('cart.drawer');
@@ -62,3 +63,9 @@ Route::get('/blog/category/{slug}', [Blog\CategoryController::class, 'show'])->n
 Route::get('/blog/tag/{slug}', [Blog\TagController::class, 'show'])->name('blog.tag');
 Route::get('/blog/{slug}', [Blog\PostController::class, 'show'])->name('blog.show');
 Route::post('/blog/{slug}/comment', [Blog\PostController::class, 'storeComment'])->middleware('throttle:6,1')->name('blog.comment.store');
+
+// Load more (AJAX)
+Route::get('/api/blog/load-more', [Blog\PostController::class, 'indexLoadMore'])->name('blog.loadMore');
+Route::get('/api/blog/category/{slug}/load-more', [Blog\CategoryController::class, 'loadMore'])->name('blog.category.loadMore');
+Route::get('/api/blog/tag/{slug}/load-more', [Blog\TagController::class, 'loadMore'])->name('blog.tag.loadMore');
+Route::get('/api/blog/{slug}/comments/load-more', [Blog\PostController::class, 'loadMoreComments'])->name('blog.comments.loadMore');
