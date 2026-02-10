@@ -115,6 +115,37 @@ class ImagesRelationManager extends RelationManager
                         ]);
                     }),
             ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make()
+                    ->using(function (array $data, string $model): Model {
+                        $tempPath = $data['image'];
+                        $disk = Storage::disk('public');
+                        $fullPath = $disk->path($tempPath);
+
+                        $uploadedFile = new UploadedFile(
+                            $fullPath,
+                            basename($fullPath),
+                            mime_content_type($fullPath) ?: 'image/jpeg',
+                            null,
+                            true
+                        );
+
+                        $imageService = app(ImageService::class);
+                        $result = $imageService->process($uploadedFile, 'products');
+
+                        $disk->delete($tempPath);
+
+                        return $this->getRelationship()->create([
+                            'path_large' => $result['path_large'],
+                            'path_medium' => $result['path_medium'],
+                            'path_thumb' => $result['path_thumb'],
+                            'width' => $result['width'],
+                            'height' => $result['height'],
+                            'alt_text' => $data['alt_text'],
+                            'sort_order' => $data['sort_order'] ?? 0,
+                        ]);
+                    }),
+            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
