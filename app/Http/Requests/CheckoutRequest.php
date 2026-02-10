@@ -31,6 +31,8 @@ class CheckoutRequest extends FormRequest
 
             'billing_same_as_shipping' => ['sometimes', 'boolean'],
 
+            'payment_method' => ['required', 'string', 'in:stripe,bank_transfer,store_pickup'],
+
             'notes' => ['nullable', 'string', 'max:500'],
         ];
 
@@ -72,6 +74,7 @@ class CheckoutRequest extends FormRequest
             'billing_state' => 'billing state/region',
             'billing_postal_code' => 'billing postal code',
             'billing_country' => 'billing country',
+            'payment_method' => 'payment method',
             'notes' => 'order notes',
         ];
     }

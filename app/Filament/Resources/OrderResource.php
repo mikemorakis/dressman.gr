@@ -58,7 +58,7 @@ class OrderResource extends Resource
             ->icon('heroicon-o-document-text')
             ->schema([
                 Forms\Components\Section::make()
-                    ->columns(3)
+                    ->columns(4)
                     ->schema([
                         Forms\Components\TextInput::make('order_number')
                             ->disabled(),
@@ -68,6 +68,15 @@ class OrderResource extends Resource
                         Forms\Components\TextInput::make('payment_status')
                             ->disabled()
                             ->formatStateUsing(fn (Order $record): string => $record->payment_status->label()),
+                        Forms\Components\TextInput::make('payment_method')
+                            ->label('Payment Method')
+                            ->disabled()
+                            ->formatStateUsing(fn (?string $state): string => match ($state) {
+                                'stripe' => 'Credit/Debit Card',
+                                'bank_transfer' => 'Bank Transfer',
+                                'store_pickup' => 'Store Pickup',
+                                default => $state ?? 'N/A',
+                            }),
                     ]),
 
                 Forms\Components\Section::make('Financials')
@@ -193,6 +202,22 @@ class OrderResource extends Resource
                     ->color(fn (PaymentStatus $state): string => $state->color())
                     ->formatStateUsing(fn (PaymentStatus $state): string => $state->label()),
 
+                Tables\Columns\TextColumn::make('payment_method')
+                    ->label('Payment')
+                    ->badge()
+                    ->color(fn (?string $state): string => match ($state) {
+                        'stripe' => 'success',
+                        'bank_transfer' => 'warning',
+                        'store_pickup' => 'info',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (?string $state): string => match ($state) {
+                        'stripe' => 'Card',
+                        'bank_transfer' => 'Bank',
+                        'store_pickup' => 'Pickup',
+                        default => $state ?? 'N/A',
+                    }),
+
                 Tables\Columns\TextColumn::make('items_count')
                     ->label('Items')
                     ->counts('items')
@@ -214,6 +239,13 @@ class OrderResource extends Resource
 
                 Tables\Filters\SelectFilter::make('payment_status')
                     ->options(PaymentStatus::class),
+
+                Tables\Filters\SelectFilter::make('payment_method')
+                    ->options([
+                        'stripe' => 'Card',
+                        'bank_transfer' => 'Bank Transfer',
+                        'store_pickup' => 'Store Pickup',
+                    ]),
 
                 Tables\Filters\TernaryFilter::make('guest')
                     ->label('Customer type')

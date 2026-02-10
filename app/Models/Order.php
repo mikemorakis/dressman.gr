@@ -28,6 +28,7 @@ class Order extends Model
         'order_number',
         'status',
         'payment_status',
+        'payment_method',
         'stripe_checkout_session_id',
         'stripe_payment_intent_id',
         'guest_token',

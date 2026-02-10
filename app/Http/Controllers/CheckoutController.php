@@ -79,15 +79,28 @@ class CheckoutController extends Controller
                 ->with('error', 'Your cart is empty.');
         }
 
+        $paymentMethod = $checkoutData['payment_method'] ?? 'stripe';
+
         try {
             $order = $this->orderService->createFromCheckout(
                 $checkoutData,
                 $this->cartService->cart()
             );
 
-            $session = $this->stripeService->createCheckoutSession($order);
+            if ($paymentMethod === 'stripe') {
+                $session = $this->stripeService->createCheckoutSession($order);
 
-            return redirect()->away($session->url);
+                return redirect()->away($session->url);
+            }
+
+            // For bank_transfer and store_pickup: order is created with Pending status
+            // Clear cart and checkout session immediately
+            $this->cartService->clear();
+            session()->forget('checkout');
+
+            return redirect()->route('checkout.success', [
+                'token' => $order->guest_token,
+            ]);
         } catch (\RuntimeException $e) {
             return redirect()->route('checkout')
                 ->with('error', $e->getMessage());
@@ -96,16 +109,21 @@ class CheckoutController extends Controller
 
     public function success(Request $request): View|RedirectResponse
     {
-        $sessionId = $request->query('session_id');
         $token = $request->query('token');
+        $sessionId = $request->query('session_id');
 
-        if (! $sessionId || ! $token) {
+        // Find order by Stripe session ID (Stripe flow) or by guest token (bank/pickup flow)
+        if ($sessionId && $token) {
+            $order = Order::where('stripe_checkout_session_id', $sessionId)
+                ->where('guest_token', $token)
+                ->first();
+        } elseif ($token) {
+            $order = Order::where('guest_token', $token)
+                ->whereIn('payment_method', ['bank_transfer', 'store_pickup'])
+                ->first();
+        } else {
             return redirect()->route('home');
         }
-
-        $order = Order::where('stripe_checkout_session_id', $sessionId)
-            ->where('guest_token', $token)
-            ->first();
 
         if (! $order) {
             return redirect()->route('home');

@@ -33,6 +33,7 @@ class OrderService
                 'order_number' => Order::generateOrderNumber(),
                 'status' => OrderStatus::Pending,
                 'payment_status' => PaymentStatus::Pending,
+                'payment_method' => $checkoutData['payment_method'] ?? 'stripe',
                 'email' => $checkoutData['email'],
                 'phone' => $checkoutData['shipping_phone'] ?? null,
                 'billing_address' => $this->formatAddress($checkoutData, 'billing'),

@@ -416,6 +416,63 @@
                         </div>
                     </fieldset>
 
+                    {{-- ── Payment Method ── --}}
+                    <fieldset class="mt-8">
+                        <legend class="text-lg font-semibold text-gray-900">Payment Method</legend>
+                        @error('payment_method')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+
+                        @php $selectedMethod = old('payment_method', $checkout['payment_method'] ?? 'stripe'); @endphp
+
+                        <div class="mt-4 space-y-3">
+                            {{-- Stripe / Card --}}
+                            <label class="flex items-start gap-3 p-4 border rounded-lg cursor-pointer transition-colors hover:bg-gray-50 @if($selectedMethod === 'stripe') border-primary-500 bg-primary-50 @else border-gray-200 @endif">
+                                <input
+                                    type="radio"
+                                    name="payment_method"
+                                    value="stripe"
+                                    @checked($selectedMethod === 'stripe')
+                                    class="mt-0.5 h-4 w-4 border-gray-300 text-primary-600 focus:ring-primary-500"
+                                >
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Credit / Debit Card</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">Secure payment via Stripe. Visa, Mastercard, American Express.</p>
+                                </div>
+                            </label>
+
+                            {{-- Bank Transfer --}}
+                            <label class="flex items-start gap-3 p-4 border rounded-lg cursor-pointer transition-colors hover:bg-gray-50 @if($selectedMethod === 'bank_transfer') border-primary-500 bg-primary-50 @else border-gray-200 @endif">
+                                <input
+                                    type="radio"
+                                    name="payment_method"
+                                    value="bank_transfer"
+                                    @checked($selectedMethod === 'bank_transfer')
+                                    class="mt-0.5 h-4 w-4 border-gray-300 text-primary-600 focus:ring-primary-500"
+                                >
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Bank Transfer</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">Pay directly via bank transfer. You will receive the bank details after placing your order.</p>
+                                </div>
+                            </label>
+
+                            {{-- Store Pickup --}}
+                            <label class="flex items-start gap-3 p-4 border rounded-lg cursor-pointer transition-colors hover:bg-gray-50 @if($selectedMethod === 'store_pickup') border-primary-500 bg-primary-50 @else border-gray-200 @endif">
+                                <input
+                                    type="radio"
+                                    name="payment_method"
+                                    value="store_pickup"
+                                    @checked($selectedMethod === 'store_pickup')
+                                    class="mt-0.5 h-4 w-4 border-gray-300 text-primary-600 focus:ring-primary-500"
+                                >
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Pay at Store (Pickup)</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">Pick up and pay at one of our stores in Athens.</p>
+                                </div>
+                            </label>
+                        </div>
+                    </fieldset>
+
                     {{-- ── Order Notes ── --}}
                     <fieldset class="mt-8">
                         <legend class="text-lg font-semibold text-gray-900">Additional Information</legend>
@@ -455,7 +512,13 @@
                         <form method="POST" action="{{ route('checkout.pay') }}">
                             @csrf
                             <button type="submit" class="btn-primary w-full sm:w-auto">
-                                Pay with Stripe
+                                @if(($checkout['payment_method'] ?? 'stripe') === 'stripe')
+                                    Pay with Card
+                                @elseif(($checkout['payment_method'] ?? '') === 'bank_transfer')
+                                    Place Order (Bank Transfer)
+                                @else
+                                    Place Order (Store Pickup)
+                                @endif
                             </button>
                         </form>
                     </div>
