@@ -46,7 +46,7 @@
                     </button>
 
                     {{-- Search + Phone (left on desktop) --}}
-                    <div class="hidden lg:flex items-center gap-x-3">
+                    <div class="hidden lg:flex items-center gap-x-3 w-64">
                         <a href="{{ url('/search') }}"
                            class="text-gray-700 hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
                            aria-label="Search products">
@@ -64,7 +64,7 @@
                     </a>
 
                     {{-- Header actions --}}
-                    <div class="flex items-center gap-x-2 sm:gap-x-3">
+                    <div class="flex items-center justify-end gap-x-2 sm:gap-x-3 lg:w-64">
                         {{-- Wishlist --}}
                         <x-wishlist-icon :count="app(App\Services\WishlistService::class)->count()" />
                         {{-- Cart --}}
