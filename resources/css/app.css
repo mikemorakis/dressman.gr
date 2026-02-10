@@ -3,9 +3,14 @@
 @tailwind utilities;
 
 @layer base {
-    /* Headings use Noto Serif Display */
+    /* Headings use Times New Roman */
     h1, h2, h3, h4, h5, h6 {
-        font-family: 'Noto Serif Display', serif;
+        font-family: 'Times New Roman', Times, serif;
+    }
+
+    /* Prices use Times New Roman */
+    .font-price {
+        font-family: 'Times New Roman', Times, serif;
     }
 
     /* Ensure minimum touch target size for interactive elements (WCAG 2.5.5) */

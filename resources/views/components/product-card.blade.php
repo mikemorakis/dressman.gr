@@ -66,7 +66,7 @@
         type="button"
         @click.prevent.stop="toggleWishlist()"
         :disabled="toggling"
-        class="absolute top-2 right-2 z-10 p-1.5 rounded-full bg-white/80 backdrop-blur-sm shadow-sm hover:bg-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+        class="absolute top-2 right-2 z-10 p-1.5 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
         :aria-label="inWishlist ? 'Remove from wishlist' : 'Add to wishlist'"
     >
         {{-- Filled heart --}}
@@ -100,9 +100,9 @@
         </h3>
 
         <div class="mt-auto pt-3 flex items-baseline gap-2">
-            <span class="text-lg font-bold text-gray-900">{{ format_price($product->price) }}</span>
+            <span class="text-lg font-bold text-gray-900 font-price">{{ format_price($product->price) }}</span>
             @if($product->is_on_sale)
-                <span class="text-sm text-gray-500 line-through">{{ format_price($product->compare_price) }}</span>
+                <span class="text-sm text-gray-500 line-through font-price">{{ format_price($product->compare_price) }}</span>
             @endif
         </div>
 

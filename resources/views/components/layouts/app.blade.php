@@ -73,12 +73,13 @@
 
         {{-- Desktop navigation bar --}}
         <nav class="hidden lg:flex justify-center gap-x-8 relative" aria-label="Main navigation">
-                    <a href="{{ url('/product-category/kostoumia') }}" class="text-sm font-medium text-gray-700 hover:text-black transition-colors leading-[3.25rem]" @mouseenter="megaMenu = true" :aria-expanded="megaMenu.toString()">Ανδρικά Ρούχα <svg class="inline h-3.5 w-3.5 -mt-px transition-transform" :class="megaMenu && 'rotate-180'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg></a>
                     <a href="{{ url('/product-category/gabriatika-kostoumia') }}" class="text-sm font-medium text-gray-700 hover:text-black transition-colors leading-[3.25rem]">Γαμπριάτικα Κοστούμια</a>
-                    <a href="{{ url('/product-category/rent') }}" class="text-sm font-medium text-gray-700 hover:text-black transition-colors leading-[3.25rem]">Ενοικίαση</a>
+                    <a href="{{ url('/product-category/rent') }}" class="text-sm font-medium text-gray-700 hover:text-black transition-colors leading-[3.25rem]">Ενοικίαση Σμόκιν</a>
                     <a href="{{ url('/metapoiisi') }}" class="text-sm font-medium text-gray-700 hover:text-black transition-colors leading-[3.25rem]">Μεταποίηση</a>
                     <a href="{{ url('/made-to-measure') }}" class="text-sm font-medium text-gray-700 hover:text-black transition-colors leading-[3.25rem]">Made to Measure</a>
+                    <a href="{{ url('/product-category/kostoumia') }}" class="text-sm font-medium text-gray-700 hover:text-black transition-colors leading-[3.25rem]" @mouseenter="megaMenu = true" :aria-expanded="megaMenu.toString()">Ανδρικά Ρούχα <svg class="inline h-3.5 w-3.5 -mt-px transition-transform" :class="megaMenu && 'rotate-180'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg></a>
                     <a href="{{ url('/blog') }}" class="text-sm font-medium text-gray-700 hover:text-black transition-colors leading-[3.25rem]">Blog</a>
+                    <a href="{{ url('/contact') }}" class="text-sm font-medium text-gray-700 hover:text-black transition-colors leading-[3.25rem]">Επικοινωνία</a>
 
             {{-- Mega-menu dropdown --}}
             <div
@@ -274,7 +275,7 @@
                         {{-- Tab 2: Useful Links --}}
                         <div x-show="tab === 'links'" x-cloak class="px-4 py-4 space-y-1">
                             <a href="{{ url('/blog') }}" class="block px-3 py-2.5 text-base font-medium text-gray-900 hover:bg-gray-50">Blog</a>
-                            <a href="{{ url('/#faq') }}" class="block px-3 py-2.5 text-base font-medium text-gray-900 hover:bg-gray-50">FAQ</a>
+                            <a href="{{ url('/faq') }}" class="block px-3 py-2.5 text-base font-medium text-gray-900 hover:bg-gray-50">FAQ</a>
                             <a href="{{ url('/payment-methods') }}" class="block px-3 py-2.5 text-base font-medium text-gray-900 hover:bg-gray-50">Τρόποι Πληρωμής</a>
                             <a href="{{ url('/returns') }}" class="block px-3 py-2.5 text-base font-medium text-gray-900 hover:bg-gray-50">Επιστροφές Αγορών</a>
                             <a href="{{ url('/privacy') }}" class="block px-3 py-2.5 text-base font-medium text-gray-900 hover:bg-gray-50">Πολιτική Απορρήτου</a>
@@ -412,10 +413,11 @@
                 <div>
                     <h2 class="text-sm font-semibold text-white uppercase tracking-wider">Κατηγορίες</h2>
                     <ul class="mt-4 space-y-2" role="list">
-                        <li><a href="{{ url('/product-category/kostoumia') }}" class="text-sm hover:text-white transition-colors">Κοστούμια</a></li>
-                        <li><a href="{{ url('/product-category/poykamisa') }}" class="text-sm hover:text-white transition-colors">Πουκάμισα</a></li>
-                        <li><a href="{{ url('/product-category/pantelonia') }}" class="text-sm hover:text-white transition-colors">Παντελόνια</a></li>
-                        <li><a href="{{ url('/product-category/axesouar') }}" class="text-sm hover:text-white transition-colors">Αξεσουάρ</a></li>
+                        <li><a href="{{ url('/product-category/gabriatika-kostoumia') }}" class="text-sm hover:text-white transition-colors">Γαμπριάτικα Κοστούμια</a></li>
+                        <li><a href="{{ url('/product-category/rent') }}" class="text-sm hover:text-white transition-colors">Ενοικίαση Κοστουμιών</a></li>
+                        <li><a href="{{ url('/metapoiisi') }}" class="text-sm hover:text-white transition-colors">Μεταποίηση Κοστουμιών</a></li>
+                        <li><a href="{{ url('/made-to-measure') }}" class="text-sm hover:text-white transition-colors">Made to Measure</a></li>
+                        <li><a href="{{ url('/product-category/kostoumia') }}" class="text-sm hover:text-white transition-colors">Ανδρικά Ρούχα</a></li>
                     </ul>
                 </div>
 
@@ -426,6 +428,7 @@
                         <li><a href="{{ url('/contact') }}" class="text-sm hover:text-white transition-colors">Επικοινωνία</a></li>
                         <li><a href="{{ url('/shipping') }}" class="text-sm hover:text-white transition-colors">Αποστολές</a></li>
                         <li><a href="{{ url('/returns') }}" class="text-sm hover:text-white transition-colors">Επιστροφές</a></li>
+                        <li><a href="{{ url('/faq') }}" class="text-sm hover:text-white transition-colors">FAQ</a></li>
                     </ul>
                 </div>
 
@@ -443,8 +446,9 @@
             </div>
 
             {{-- Bottom bar --}}
-            <div class="mt-12 pt-8 border-t border-gray-800 text-center text-sm">
+            <div class="mt-12 pt-8 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm">
                 <p>&copy; {{ date('Y') }} Dressman. All rights reserved.</p>
+                <p>Performance Eshop by <a href="https://symbols.gr/sxediasmos-istoselidas" target="_blank" rel="noopener" class="text-white hover:underline">Symbols</a></p>
             </div>
         </div>
     </footer>

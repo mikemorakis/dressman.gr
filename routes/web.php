@@ -28,6 +28,7 @@ Route::get('/payment-methods', fn () => view('pages.payment-methods'))->name('pa
 Route::get('/returns', fn () => view('pages.returns'))->name('returns');
 Route::get('/shipping', fn () => view('pages.shipping'))->name('shipping');
 Route::get('/contact', fn () => view('pages.contact'))->name('contact');
+Route::get('/faq', fn () => view('pages.faq'))->name('faq');
 
 Route::get('/api/products/load-more', [HomeController::class, 'loadMore'])->name('products.loadMore');
 

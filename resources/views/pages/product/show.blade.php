@@ -168,14 +168,14 @@
                     {{-- Price --}}
                     <div class="mt-4 flex items-baseline gap-3">
                         @if($hasVariants)
-                            <span class="text-2xl font-bold text-gray-900"
+                            <span class="text-2xl font-bold text-gray-900 font-price"
                                   x-text="currentVariant ? currentVariant.price_formatted : '{{ format_price($product->price) }}'">
                                 {{ format_price($product->price) }}
                             </span>
                         @else
-                            <span class="text-2xl font-bold text-gray-900">{{ format_price($product->price) }}</span>
+                            <span class="text-2xl font-bold text-gray-900 font-price">{{ format_price($product->price) }}</span>
                             @if($product->is_on_sale)
-                                <span class="text-base text-gray-500 line-through">{{ format_price($product->compare_price) }}</span>
+                                <span class="text-base text-gray-500 line-through font-price">{{ format_price($product->compare_price) }}</span>
                             @endif
                         @endif
                     </div>
@@ -367,7 +367,7 @@
         >
             <div class="flex items-center justify-between gap-3 px-4 py-3">
                 <div class="flex flex-col min-w-0">
-                    <span class="text-lg font-bold text-gray-900 truncate"
+                    <span class="text-lg font-bold text-gray-900 truncate font-price"
                           x-text="currentVariant ? currentVariant.price_formatted : '{{ format_price($product->price) }}'">
                         {{ format_price($product->price) }}
                     </span>
