@@ -93,5 +93,87 @@ Alpine.data('cartDrawer', () => ({
     },
 }));
 
+Alpine.data('wishlistDrawer', () => ({
+    show: false,
+    loading: false,
+
+    open(html) {
+        this.show = true;
+        if (html) {
+            this.$refs.content.innerHTML = html;
+        } else {
+            this.refresh();
+        }
+    },
+
+    close() {
+        this.show = false;
+    },
+
+    async refresh() {
+        this.loading = true;
+        try {
+            const res = await fetch('/wishlist/drawer');
+            this.$refs.content.innerHTML = await res.text();
+        } finally {
+            this.loading = false;
+        }
+    },
+
+    async handleClick(e) {
+        const removeBtn = e.target.closest('[data-remove]');
+        if (removeBtn) {
+            e.preventDefault();
+            const itemId = removeBtn.dataset.remove;
+            const res = await fetch(`/wishlist/${itemId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken(),
+                },
+            });
+            if (res.ok) {
+                const data = await res.json();
+                this.$refs.content.innerHTML = data.drawer_html;
+                window.dispatchEvent(new CustomEvent('wishlist-count-updated', { detail: { count: data.count } }));
+            }
+            return;
+        }
+
+        const moveBtn = e.target.closest('[data-move-to-cart]');
+        if (moveBtn) {
+            e.preventDefault();
+            const itemId = moveBtn.dataset.moveToCart;
+            const res = await fetch(`/wishlist/${itemId}/move-to-cart`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken(),
+                },
+            });
+            if (res.ok) {
+                const data = await res.json();
+                this.$refs.content.innerHTML = data.wishlist_drawer_html;
+                window.dispatchEvent(new CustomEvent('wishlist-count-updated', { detail: { count: data.wishlist_count } }));
+                window.dispatchEvent(new CustomEvent('cart-count-updated', { detail: { count: data.cart_count } }));
+            }
+            return;
+        }
+
+        if (e.target.closest('[data-close-drawer]')) {
+            e.preventDefault();
+            const link = e.target.closest('a[data-close-drawer]');
+            this.close();
+            if (link && link.href) {
+                window.location.href = link.href;
+            }
+        }
+    },
+
+    handleWishlistOpen(e) {
+        this.open(e.detail?.html);
+    },
+}));
+
 window.Alpine = Alpine;
 Alpine.start();

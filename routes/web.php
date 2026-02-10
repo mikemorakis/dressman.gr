@@ -8,6 +8,7 @@ use App\Http\Controllers\GuestOrderController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StripeWebhookController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
@@ -36,6 +37,12 @@ Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::patch('/cart/{item}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/{item}', [CartController::class, 'remove'])->name('cart.remove');
 Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
+Route::get('/wishlist/drawer', [WishlistController::class, 'drawer'])->name('wishlist.drawer');
+Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+Route::delete('/wishlist/{item}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+Route::post('/wishlist/{item}/move-to-cart', [WishlistController::class, 'moveToCart'])->name('wishlist.moveToCart');
 
 Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
 Route::post('/checkout', [CheckoutController::class, 'store'])->middleware('throttle:checkout')->name('checkout.store');

@@ -62,6 +62,8 @@
 
                     {{-- Header actions --}}
                     <div class="flex items-center gap-x-2 sm:gap-x-3">
+                        {{-- Wishlist --}}
+                        <x-wishlist-icon :count="app(App\Services\WishlistService::class)->count()" />
                         {{-- Cart --}}
                         <x-cart-icon :count="app(App\Services\CartService::class)->count()" />
                     </div>
@@ -484,6 +486,48 @@
             role="dialog"
             aria-modal="true"
             aria-label="Shopping cart"
+            x-ref="content"
+        >
+            {{-- Content loaded via fetch --}}
+        </div>
+    </div>
+
+    {{-- Wishlist drawer (site-wide, Alpine island) --}}
+    <div
+        x-data="wishlistDrawer"
+        @wishlist-open.window="handleWishlistOpen($event)"
+        x-cloak
+    >
+        {{-- Backdrop --}}
+        <div
+            x-show="show"
+            x-transition:enter="transition-opacity ease-out duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            @click="close()"
+            class="fixed inset-0 z-50 bg-black/25"
+            aria-hidden="true"
+        ></div>
+
+        {{-- Slide-in panel (right) --}}
+        <div
+            x-show="show"
+            x-trap.inert.noscroll="show"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="translate-x-full"
+            x-transition:enter-end="translate-x-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="translate-x-0"
+            x-transition:leave-end="translate-x-full"
+            @keydown.escape.window="close()"
+            @click="handleClick($event)"
+            class="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white shadow-xl flex flex-col"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Wishlist"
             x-ref="content"
         >
             {{-- Content loaded via fetch --}}
