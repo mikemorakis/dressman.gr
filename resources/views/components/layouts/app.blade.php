@@ -30,7 +30,7 @@
         {{-- Top bar: logo centered, search + cart --}}
         <div class="border-b border-gray-100 flex-1 min-h-0">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
-                <div class="flex items-center justify-between h-full">
+                <div class="relative flex items-center justify-between h-full">
                     {{-- Mobile menu button --}}
                     <button
                         type="button"
@@ -46,7 +46,7 @@
                     </button>
 
                     {{-- Search + Phone (left on desktop) --}}
-                    <div class="hidden lg:flex items-center gap-x-3 w-64">
+                    <div class="hidden lg:flex items-center gap-x-3">
                         <a href="{{ url('/search') }}"
                            class="text-gray-700 hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
                            aria-label="Search products">
@@ -58,13 +58,13 @@
                     </div>
 
                     {{-- Logo (centered) --}}
-                    <a href="{{ url('/') }}" class="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 lg:flex-1 lg:text-center flex flex-col items-center" aria-label="Dressman home">
+                    <a href="{{ url('/') }}" class="absolute left-1/2 -translate-x-1/2 flex flex-col items-center" aria-label="Dressman home">
                         <x-picture src="images/dressman-logo-big.png" alt="Dressman" class="h-8 sm:h-10 lg:h-12 w-auto mx-auto" loading="eager" fetchpriority="high" />
                         <span class="text-[10px] sm:text-xs tracking-[0.2em] text-gray-500 font-light mt-1">— est 1974 —</span>
                     </a>
 
                     {{-- Header actions --}}
-                    <div class="flex items-center justify-end gap-x-2 sm:gap-x-3 lg:w-64">
+                    <div class="flex items-center gap-x-2 sm:gap-x-3">
                         {{-- Wishlist --}}
                         <x-wishlist-icon :count="app(App\Services\WishlistService::class)->count()" />
                         {{-- Cart --}}
