@@ -182,7 +182,7 @@
 
                     {{-- Short description --}}
                     @if($product->short_description)
-                        <p class="mt-4 text-gray-600">{{ $product->short_description }}</p>
+                        <div class="mt-4 text-gray-600 prose prose-sm max-w-none">{!! clean_html($product->short_description) !!}</div>
                     @endif
 
                     {{-- Variant Selector --}}

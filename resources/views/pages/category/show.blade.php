@@ -28,7 +28,7 @@
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900">{{ $category->name }}</h1>
             @if($category->description)
-                <div class="mt-2 text-gray-600 max-w-3xl prose prose-sm">{!! $category->description !!}</div>
+                <div class="mt-2 text-gray-600 max-w-none prose prose-sm">{!! $category->description !!}</div>
             @endif
         </div>
 

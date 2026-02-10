@@ -73,13 +73,13 @@
 
         {{-- Desktop navigation bar --}}
         <nav class="hidden lg:flex justify-center gap-x-8 relative" aria-label="Main navigation">
-                    <a href="{{ url('/product-category/gabriatika-kostoumia') }}" class="text-sm font-medium text-gray-700 hover:text-black transition-colors leading-[3.25rem]">Γαμπριάτικα Κοστούμια</a>
-                    <a href="{{ url('/product-category/rent') }}" class="text-sm font-medium text-gray-700 hover:text-black transition-colors leading-[3.25rem]">Ενοικίαση Σμόκιν</a>
-                    <a href="{{ url('/metapoiisi') }}" class="text-sm font-medium text-gray-700 hover:text-black transition-colors leading-[3.25rem]">Μεταποίηση</a>
-                    <a href="{{ url('/made-to-measure') }}" class="text-sm font-medium text-gray-700 hover:text-black transition-colors leading-[3.25rem]">Made to Measure</a>
-                    <a href="{{ url('/product-category/kostoumia') }}" class="text-sm font-medium text-gray-700 hover:text-black transition-colors leading-[3.25rem]" @mouseenter="megaMenu = true" :aria-expanded="megaMenu.toString()">Ανδρικά Ρούχα <svg class="inline h-3.5 w-3.5 -mt-px transition-transform" :class="megaMenu && 'rotate-180'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg></a>
-                    <a href="{{ url('/blog') }}" class="text-sm font-medium text-gray-700 hover:text-black transition-colors leading-[3.25rem]">Blog</a>
-                    <a href="{{ url('/contact') }}" class="text-sm font-medium text-gray-700 hover:text-black transition-colors leading-[3.25rem]">Επικοινωνία</a>
+                    <a href="{{ url('/product-category/gabriatika-kostoumia') }}" class="text-sm font-light text-gray-700 hover:text-black transition-colors leading-[3.25rem]">Γαμπριάτικα Κοστούμια</a>
+                    <a href="{{ url('/product-category/rent') }}" class="text-sm font-light text-gray-700 hover:text-black transition-colors leading-[3.25rem]">Ενοικίαση Σμόκιν</a>
+                    <a href="{{ url('/metapoiisi') }}" class="text-sm font-light text-gray-700 hover:text-black transition-colors leading-[3.25rem]">Μεταποίηση</a>
+                    <a href="{{ url('/made-to-measure') }}" class="text-sm font-light text-gray-700 hover:text-black transition-colors leading-[3.25rem]">Made to Measure</a>
+                    <a href="{{ url('/product-category/kostoumia') }}" class="text-sm font-light text-gray-700 hover:text-black transition-colors leading-[3.25rem]" @mouseenter="megaMenu = true" :aria-expanded="megaMenu.toString()">Ανδρικά Ρούχα <svg class="inline h-3.5 w-3.5 -mt-px transition-transform" :class="megaMenu && 'rotate-180'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg></a>
+                    <a href="{{ url('/blog') }}" class="text-sm font-light text-gray-700 hover:text-black transition-colors leading-[3.25rem]">Blog</a>
+                    <a href="{{ url('/contact') }}" class="text-sm font-light text-gray-700 hover:text-black transition-colors leading-[3.25rem]">Επικοινωνία</a>
 
             {{-- Mega-menu dropdown --}}
             <div
@@ -403,7 +403,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 {{-- Brand --}}
                 <div>
-                    <span class="text-xl font-bold text-white tracking-widest font-serif">DRESSMAN</span>
+                    <img src="{{ asset('images/dressman-logo-white.png') }}" alt="Dressman" class="h-8 w-auto">
                     <p class="mt-4 text-sm leading-relaxed">
                         Ανδρικά ρούχα υψηλής ποιότητας. Κοστούμια, πουκάμισα, αξεσουάρ.
                     </p>

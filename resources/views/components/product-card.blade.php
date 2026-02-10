@@ -93,7 +93,7 @@
 
     {{-- Content --}}
     <div class="flex flex-col flex-1 p-4">
-        <h3 class="text-sm font-medium text-gray-900 line-clamp-2">
+        <h3 class="text-base font-bold text-gray-900 line-clamp-2">
             <a href="{{ $url }}" class="after:absolute after:inset-0">
                 {{ $product->name }}
             </a>
